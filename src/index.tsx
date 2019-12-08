@@ -1,55 +1,87 @@
 import React, { useEffect, useRef, useState } from "react"
 import { render } from "react-dom"
 import * as tf from "@tensorflow/tfjs"
+import { Box } from "./Box"
 import * as mobilenet from "@tensorflow-models/mobilenet"
-// @ts-ignore
-import dog from "./dog.jpg"
-
 import styled from "styled-components"
 
-const Box = styled.div`
-  border: 1px solid rgb(30%, 30%, 30%);
-  border-radius: 10px;
-  padding: 1em;
-  margin: 1em;
+const CloakVideo = styled.video`
+  display: none;
+`
+
+const Hit = styled.pre`
+  color: red;
+  font-weight: bold;
 `
 const App = () => {
-  const [result, setResult] = useState<any>(null)
-  // const imgRef = useRef<HTMLImageElement>(null)
+  const [rawResult, setRawResult] = useState<any>(null)
+  const [result, setResult] = useState<any>([])
+  const [net, setNet] = useState<any>(null)
+  const [cam, setCam] = useState<any>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   useEffect(() => {
+    mobilenet.load().then((net) => setNet(net))
+  }, [])
+  useEffect(() => {
+    if (net == null) {
+      return
+    }
     if (videoRef.current === null) {
       return
     }
     const videoEl = videoRef.current
-    const cam = tf.data.webcam(videoEl)
-    cam.capture().the
-    mobilenet
-      .load()
-      .then((net) => {
-        return net.classify(imgEl)
-      })
-      .then((result) => {
-        setResult(result)
-      })
-      .catch((e) => {
-        setResult({
-          isError: true,
-          error: e
+    tf.data.webcam(videoEl).then((cam) => {
+      console.log("set")
+      setCam(cam)
+    })
+  }, [net])
+  useEffect(() => {
+    if (cam === null) {
+      return
+    }
+    setInterval(() => {
+      cam.capture().then((img) => {
+        net.classify(img).then((result) => {
+          setRawResult(result)
+          img.dispose()
+          return tf.nextFrame()
         })
       })
-  })
+    }, 500)
+  }, [cam])
+
+  useEffect(() => {
+    const r = (rawResult || []).map((r) => {
+      return {
+        data: JSON.stringify(r, null, 2),
+        hit: r.className === "Norfolk terrier"
+      }
+    })
+    setResult(r)
+  }, [rawResult])
+
   return (
     <div>
       <Box>
         <div>input:</div>
-        <img width="300" src={dog} ref={imgRef} />
-        <video autoplay playsinline width="224" ref={videoRef}></video>
+        <video
+          autoPlay
+          playsInline
+          muted
+          width="224"
+          height="224"
+          ref={videoRef}
+        ></video>
       </Box>
       <Box>
-        <pre>
-          result: {result ? JSON.stringify(result, null, 2) : "loading..."}
-        </pre>
+        <div>
+          Result:
+          {result.map((r, i) => (
+            <div key={i}>
+              {r.hit ? <Hit>{r.data}</Hit> : <pre>{r.data}</pre>}
+            </div>
+          ))}
+        </div>
       </Box>
       <div>
         <a href="https://codelabs.developers.google.com/codelabs/tensorflowjs-teachablemachine-codelab/index.html?hl=ja">
