@@ -1,18 +1,8 @@
 import React, { useEffect, useRef, useState } from "react"
 import { render } from "react-dom"
-// import "@tensorflow/tfjs"
+import { Box } from "./Box"
 import * as mobilenet from "@tensorflow-models/mobilenet"
-// @ts-ignore
-// import dog from "./dog.jpg"
 
-import styled from "styled-components"
-
-const Box = styled.div`
-  border: 1px solid rgb(30%, 30%, 30%);
-  border-radius: 10px;
-  padding: 1em;
-  margin: 1em;
-`
 const App = () => {
   const [result, setResult] = useState<any>(null)
   const imgRef = useRef<HTMLImageElement>(null)
