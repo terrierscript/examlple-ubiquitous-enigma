@@ -40,6 +40,7 @@ const App = () => {
       <Box>
         <div>input:</div>
         <img width="300" src={dog} ref={imgRef} />
+        <video autoplay playsinline width="224"></video>
       </Box>
       <Box>
         <pre>
@@ -47,6 +48,10 @@ const App = () => {
         </pre>
       </Box>
       <div>
+        <a href="https://codelabs.developers.google.com/codelabs/tensorflowjs-teachablemachine-codelab/index.html?hl=ja">
+          codelabs
+        </a>
+        |
         <a href="https://github.com/terrierscript/examlple-ubiquitous-enigma">
           source code
         </a>
