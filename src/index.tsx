@@ -41,7 +41,6 @@ const App = () => {
       <Box>
         <div>input:</div>
         <img width="300" src={dog} ref={imgRef} />
-        <video autoplay playsinline width="224"></video>
       </Box>
       <Box>
         <pre>
