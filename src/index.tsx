@@ -3,7 +3,7 @@ import { render } from "react-dom"
 // import "@tensorflow/tfjs"
 import * as mobilenet from "@tensorflow-models/mobilenet"
 // @ts-ignore
-import dog from "./dog.jpg"
+// import dog from "./dog.jpg"
 
 import styled from "styled-components"
 
@@ -42,12 +42,19 @@ const App = () => {
     <div>
       <Box>
         <div>input:</div>
-        <img width="300" src={dog} ref={imgRef} />
+        <img
+          width="300"
+          src={
+            "https://user-images.githubusercontent.com/13282103/70384565-b5584700-19c3-11ea-90e0-c079583781c3.jpg"
+          }
+          ref={imgRef}
+        />
       </Box>
       <Box>
         <pre>
-          result: {result ? JSON.stringify(result, null, 2) : "loading..."}
+          Result: {result ? JSON.stringify(result, null, 2) : "loading..."}
         </pre>
+        <div>Expect: Norfolk terrier </div>
       </Box>
       <div>
         <a href="https://codelabs.developers.google.com/codelabs/tensorflowjs-teachablemachine-codelab/index.html?hl=ja">
