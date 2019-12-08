@@ -21,20 +21,22 @@ const App = () => {
       return
     }
     const imgEl = imgRef.current
-    mobilenet
-      .load()
-      .then((net) => {
-        return net.classify(imgEl)
-      })
-      .then((result) => {
-        setResult(result)
-      })
-      .catch((e) => {
-        setResult({
-          isError: true,
-          error: e
+    imgEl.onload = () => {
+      mobilenet
+        .load()
+        .then((net) => {
+          return net.classify(imgEl)
         })
-      })
+        .then((result) => {
+          setResult(result)
+        })
+        .catch((e) => {
+          setResult({
+            isError: true,
+            error: e
+          })
+        })
+    }
   })
   return (
     <div>
