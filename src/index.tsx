@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react"
 import { render } from "react-dom"
-// import "@tensorflow/tfjs"
+import * as tf from "@tensorflow/tfjs"
 import * as mobilenet from "@tensorflow-models/mobilenet"
 // @ts-ignore
 import dog from "./dog.jpg"
@@ -15,12 +15,15 @@ const Box = styled.div`
 `
 const App = () => {
   const [result, setResult] = useState<any>(null)
-  const imgRef = useRef<HTMLImageElement>(null)
+  // const imgRef = useRef<HTMLImageElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
   useEffect(() => {
-    if (imgRef.current === null) {
+    if (videoRef.current === null) {
       return
     }
-    const imgEl = imgRef.current
+    const videoEl = videoRef.current
+    const cam = tf.data.webcam(videoEl)
+    cam.capture().the
     mobilenet
       .load()
       .then((net) => {
@@ -41,6 +44,7 @@ const App = () => {
       <Box>
         <div>input:</div>
         <img width="300" src={dog} ref={imgRef} />
+        <video autoplay playsinline width="224" ref={videoRef}></video>
       </Box>
       <Box>
         <pre>
